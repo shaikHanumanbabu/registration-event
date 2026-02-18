@@ -117,8 +117,8 @@
                     <div class="col-md-6">
                         <div class="qr-placeholder">
                             <div class="text-center">
-                                @if(file_exists(public_path('images/payment-qr.png')))
-                                <img src="{{ asset('images/payment-qr.png') }}"
+                                @if(file_exists(public_path('images/payment-qr2.png')))
+                                <img src="{{ asset('images/payment-qr2.png') }}"
                                     alt="Payment QR Code"
                                     class="img-fluid"
                                     style="max-width: 100%; max-height: 200px; width: auto; height: auto; object-fit: contain;">
@@ -133,7 +133,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label">Total Amount <span class="text-danger">*</span></label>
-                            <input type="number" name="total_amount" class="form-control" step="0.01" min="0" value="{{ old('total_amount') }}" placeholder="Enter amount" required>
+                            <input type="text" readonly id="total_amount" name="total_amount" class="form-control" step="0.01" min="0" value="{{ old('total_amount') }}" placeholder="Enter amount" required>
                         </div>
                     </div>
                 </div>
