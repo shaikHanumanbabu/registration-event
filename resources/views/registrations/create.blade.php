@@ -76,7 +76,7 @@
             <!-- if customer type is existing we need to display this input -->
             <div class="mb-3" id="customerIdSection" style="display: none;">
                 <label class="form-label">Enter Customer Id </label>
-                <input type="text" name="customer_id" id="customer_id" class="form-control" value="{{ old('customer_id') }}" placeholder="Enter customer id" required>
+                <input type="text" name="customer_id" id="customer_id" class="form-control" value="{{ old('customer_id') }}" placeholder="Enter customer id">
             </div>
 
             <div class="mb-3">
@@ -132,7 +132,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label class="form-label">Total Amount <span class="text-danger">*</span></label>
+                            <label class="form-label">Total Amount </label>
                             <input type="text" readonly id="total_amount" name="total_amount" class="form-control" step="0.01" min="0" value="{{ old('total_amount') }}" placeholder="Enter amount" required>
                         </div>
                     </div>

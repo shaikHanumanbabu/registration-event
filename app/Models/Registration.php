@@ -24,6 +24,7 @@ class Registration extends Model
         'total_amount',
         'payment_type',
         'payment_receipt',
+        'payment_status',
         'qr_code'
     ];
 
@@ -40,7 +41,7 @@ class Registration extends Model
     {
         $prefix = 'CUST';
         $year = date('Y');
-        
+
         // Get the last customer number for this year
         $lastRegistration = self::where('customer_no', 'LIKE', $prefix . $year . '%')
             ->orderBy('customer_no', 'desc')

@@ -82,12 +82,18 @@
       </div>
 
       <!-- QR Code Section -->
-      @if($qrCodePath && file_exists(public_path($qrCodePath)))
+      @if($registration->qr_code)
+      @php
+      $qrUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($registration->qr_code);
+      $filePath = storage_path('app/public/' . $registration->qr_code);
+      @endphp
+      @if(file_exists($filePath))
       <div style="text-align: center; margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
         <h3 style="margin: 0 0 15px 0; font-size: 16px; color: #333333; font-weight: bold;">Your Registration QR Code</h3>
         <p style="margin: 0 0 15px 0; font-size: 12px; color: #888888;">Use this QR code for event check-in</p>
-        <img src="{{ asset($qrCodePath) }}" alt="Registration QR Code" style="max-width: 250px; height: auto; border-radius: 8px; border: 1px solid #ddd;">
+        <img src="{{ $qrUrl }}" alt="Registration QR Code" style="max-width: 250px; height: auto; border-radius: 8px; border: 1px solid #ddd;">
       </div>
+      @endif
       @endif
 
       <!-- Message -->

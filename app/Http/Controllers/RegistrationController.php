@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Registration;
+use App\Models\User;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class RegistrationController extends Controller
 {
@@ -23,6 +26,7 @@ class RegistrationController extends Controller
      */
     public function create()
     {
+
         return view('registrations.create');
     }
 
@@ -42,7 +46,7 @@ class RegistrationController extends Controller
             'address' => 'required|string',
             'state' => 'required|string|max:100',
             'notes' => 'nullable|string',
-            'total_amount' => 'required|numeric|min:0',
+            'total_amount' => 'nullable|numeric|min:0',
             'payment_type' => 'required|in:phonepe,gpay,others',
             'payment_receipt' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
@@ -83,7 +87,7 @@ class RegistrationController extends Controller
         $qrData .= "Name: {$registration->name}\n";
         $qrData .= "Email: {$registration->email}\n";
         $qrData .= "Amount: ₹{$registration->total_amount}";
-/* 
+        /* 
         $qrCodePath = 'qr_codes/registration_' . $registration->id . '.png';
 
         // Use BaconQrCode directly with PNG renderer and UTF-8 encoding
@@ -115,13 +119,25 @@ class RegistrationController extends Controller
         $qrCode = $writer->writeString($qrData, 'UTF-8');
 
         Storage::disk('public')->put($qrCodePath, $qrCode);
-        
+
         // Update registration with QR code path
         $registration->update(['qr_code' => $qrCodePath]);
 
+        // Send registration testing email
+        try {
+            Mail::send('emails.registration-success', [
+                'registration' => $registration,
+            ], function ($message) use ($registration) {
+                $message->to($registration->email)
+                    ->subject('Registration Confirmation - ' . config('app.name'))
+                    ->from(config('mail.from.address'), config('mail.from.name'));
+            });
+        } catch (\Exception $e) {
+            Log::error('Failed to send registration email: ' . $e->getMessage());
+        }
+
         return redirect()->route('registrations.index')
             ->with('success', 'Registration created successfully! Customer Number: ' . $registration->customer_no);
-
     }
 
     /**
@@ -167,7 +183,7 @@ class RegistrationController extends Controller
             if ($registration->payment_receipt) {
                 Storage::disk('public')->delete($registration->payment_receipt);
             }
-            
+
             $file = $request->file('payment_receipt');
             $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('payment_receipts', $filename, 'public');
