@@ -183,8 +183,8 @@
                             <td class="text-center">
                                 @if ($registration->qr_code)
                                 @php
-                                $qrUrl = Storage::disk('public')->url($registration->qr_code);
-                                $filePath = storage_path('app/public/' . $registration->qr_code);
+                                $qrUrl = asset($registration->qr_code);
+                                $filePath = public_path($registration->qr_code);
                                 @endphp
 
                                 @if(file_exists($filePath))
@@ -238,8 +238,8 @@
                                         @if ($registration->qr_code)
                                         @php
                                         $extension = pathinfo($registration->qr_code, PATHINFO_EXTENSION);
-                                        $filePath = storage_path('app/public/' . $registration->qr_code);
-                                        $qrUrl = Storage::disk('public')->url($registration->qr_code);
+                                        $filePath = public_path($registration->qr_code);
+                                        $qrUrl = asset($registration->qr_code);
                                         @endphp
 
                                         @if(file_exists($filePath))

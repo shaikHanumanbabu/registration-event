@@ -84,8 +84,8 @@
       <!-- QR Code Section -->
       @if($registration->qr_code)
       @php
-      $qrUrl = \Illuminate\Support\Facades\Storage::disk('public')->url($registration->qr_code);
-      $filePath = storage_path('app/public/' . $registration->qr_code);
+      $qrUrl = asset($registration->qr_code);
+      $filePath = public_path($registration->qr_code);
       @endphp
       @if(file_exists($filePath))
       <div style="text-align: center; margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">

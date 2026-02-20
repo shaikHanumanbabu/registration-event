@@ -84,27 +84,14 @@ class RegistrationController extends Controller
         // Generate QR code for this registration with verification URL
         $verificationUrl = route('verify-checkin', ['id' => $registration->id]);
         $qrData = $verificationUrl;
-        /* 
-        $qrCodePath = 'qr_codes/registration_' . $registration->id . '.png';
-
-        // Use BaconQrCode directly with PNG renderer and UTF-8 encoding
-        $renderer = new \BaconQrCode\Renderer\ImageRenderer(
-            new \BaconQrCode\Renderer\RendererStyle\RendererStyle(300),
-            new \BaconQrCode\Renderer\Image\EpsImageBackEnd()
-        );
-
-        $writer = new \BaconQrCode\Writer($renderer);
-
-        // Use UTF-8 encoding options
-        $qrCode = $writer->writeString(
-            $qrData,
-            'UTF-8'
-        );
-
-        Storage::disk('public')->put($qrCodePath, $qrCode); */
-
 
         $qrCodePath = 'images/qr_codes/registration_' . $registration->id . '.svg';
+        $qrCodePublicPath = public_path($qrCodePath);
+
+        // Create directory if it doesn't exist
+        if (!file_exists(dirname($qrCodePublicPath))) {
+            mkdir(dirname($qrCodePublicPath), 0755, true);
+        }
 
         // Use SVG backend - works without any extensions
         $renderer = new \BaconQrCode\Renderer\ImageRenderer(
@@ -115,7 +102,8 @@ class RegistrationController extends Controller
         $writer = new \BaconQrCode\Writer($renderer);
         $qrCode = $writer->writeString($qrData, 'UTF-8');
 
-        Storage::disk('public')->put($qrCodePath, $qrCode);
+        // Store directly in public folder
+        file_put_contents($qrCodePublicPath, $qrCode);
 
         // Update registration with QR code path
         $registration->update(['qr_code' => $qrCodePath]);
@@ -133,7 +121,7 @@ class RegistrationController extends Controller
             Log::error('Failed to send registration email: ' . $e->getMessage());
         }
 
-        return redirect()->route('registrations.index')
+        return redirect()->route('registrations.create')
             ->with('success', 'Registration created successfully! Customer Number: ' . $registration->customer_no);
     }
 
@@ -203,7 +191,10 @@ class RegistrationController extends Controller
             Storage::disk('public')->delete($registration->payment_receipt);
         }
         if ($registration->qr_code) {
-            Storage::disk('public')->delete($registration->qr_code);
+            $qrCodePath = public_path($registration->qr_code);
+            if (file_exists($qrCodePath)) {
+                unlink($qrCodePath);
+            }
         }
 
         $registration->delete();

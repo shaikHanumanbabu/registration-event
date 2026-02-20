@@ -20,6 +20,13 @@
             </a>
         </div> -->
 
+        @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        @endif
+
         @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show">
             <strong>Please fix the following errors:</strong>
@@ -178,7 +185,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-submit">
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-submit">
                     <i class="fas fa-paper-plane me-2"></i>Submit Registration
                 </button>
             </div>
@@ -189,3 +196,25 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function(e) {
+                // Disable the button
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.6';
+                submitBtn.style.cursor = 'not-allowed';
+
+                // Optional: Show loading text
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+            });
+        }
+    });
+</script>
+@endpush
