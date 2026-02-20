@@ -15,6 +15,10 @@ Route::get('/', function () {
 
 Route::resource('registrations', RegistrationController::class);
 
+// QR Code verification and check-in routes
+Route::get('/verify-checkin/{id}', [RegistrationController::class, 'verifyCheckin'])->name('verify-checkin');
+Route::post('/confirm-checkin/{id}', [RegistrationController::class, 'confirmCheckin'])->name('confirm-checkin');
+
 // Route to check registration success email with static data
 Route::get('/check-registration-mail', function () {
     $registration = (object) [

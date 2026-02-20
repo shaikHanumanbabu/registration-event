@@ -55,7 +55,7 @@ class RegistrationController extends Controller
         if ($request->hasFile('payment_receipt')) {
             $file = $request->file('payment_receipt');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('payment_receipts', $filename, 'public');
+            $path = $file->storeAs('images/payment_receipts', $filename, 'public');
             $validated['payment_receipt'] = $path;
         }
 
@@ -81,12 +81,9 @@ class RegistrationController extends Controller
         // Create registration
         $registration = Registration::create($validated);
 
-        // Generate QR code for this registration
-        $qrData = "Registration ID: {$registration->id}\n";
-        $qrData .= "Customer No: {$registration->customer_no}\n";
-        $qrData .= "Name: {$registration->name}\n";
-        $qrData .= "Email: {$registration->email}\n";
-        $qrData .= "Amount: ₹{$registration->total_amount}";
+        // Generate QR code for this registration with verification URL
+        $verificationUrl = route('verify-checkin', ['id' => $registration->id]);
+        $qrData = $verificationUrl;
         /* 
         $qrCodePath = 'qr_codes/registration_' . $registration->id . '.png';
 
@@ -107,7 +104,7 @@ class RegistrationController extends Controller
         Storage::disk('public')->put($qrCodePath, $qrCode); */
 
 
-        $qrCodePath = 'qr_codes/registration_' . $registration->id . '.svg';
+        $qrCodePath = 'images/qr_codes/registration_' . $registration->id . '.svg';
 
         // Use SVG backend - works without any extensions
         $renderer = new \BaconQrCode\Renderer\ImageRenderer(
@@ -186,7 +183,7 @@ class RegistrationController extends Controller
 
             $file = $request->file('payment_receipt');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('payment_receipts', $filename, 'public');
+            $path = $file->storeAs('images/payment_receipts', $filename, 'public');
             $validated['payment_receipt'] = $path;
         }
 
@@ -213,5 +210,26 @@ class RegistrationController extends Controller
 
         return redirect()->route('registrations.index')
             ->with('success', 'Registration deleted successfully!');
+    }
+
+    /**
+     * Show verification and check-in details
+     */
+    public function verifyCheckin($id)
+    {
+        $registration = Registration::findOrFail($id);
+        return view('registrations.verify-checkin', compact('registration'));
+    }
+
+    /**
+     * Mark registration as checked in
+     */
+    public function confirmCheckin($id)
+    {
+        $registration = Registration::findOrFail($id);
+        $registration->update(['checked_in' => true, 'checked_in_at' => now()]);
+
+        return redirect()->route('verify-checkin', ['id' => $id])
+            ->with('success', 'Check-in verified successfully!');
     }
 }

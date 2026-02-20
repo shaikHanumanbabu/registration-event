@@ -25,13 +25,17 @@ class Registration extends Model
         'payment_type',
         'payment_receipt',
         'payment_status',
-        'qr_code'
+        'qr_code',
+        'checked_in',
+        'checked_in_at'
     ];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
         'adults_count' => 'integer',
         'child_count' => 'integer',
+        'checked_in' => 'boolean',
+        'checked_in_at' => 'datetime',
     ];
 
     /**

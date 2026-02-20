@@ -5,10 +5,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const adultsCount = document.getElementById("adults_count");
     const childCount = document.getElementById("child_count");
     const totalAmount = document.getElementById("total_amount");
+    const oldCustomerSection = document.getElementById("oldCustomerSection");
+    const newMemberMessage = document.getElementById("newMemberMessage");
+    const customerIdSection = document.getElementById("customerIdSection");
 
     // Pricing constants
     const ADULT_PRICE = 500;
-    const CHILD_PRICE = 300;
+    const CHILD_PRICE = 1;
 
     // Function to calculate total amount based on counts
     function calculateTotalAmount() {
@@ -25,7 +28,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateFamilyFields() {
         const type = customerType.value;
+
         const family = familyIncluded.value;
+
+        if (type == "") return;
+        // Show/Hide old customer section based on customer type
+        if (type === "new") {
+            oldCustomerSection.style.display = "none";
+            newMemberMessage.style.display = "block";
+            customerIdSection.style.display = "none";
+        } else {
+            oldCustomerSection.style.display = "block";
+            newMemberMessage.style.display = "none";
+            customerIdSection.style.display = "block";
+        }
 
         if (family === "yes" && type === "existing") {
             familyCountSection.style.display = "block";
@@ -67,7 +83,19 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     if (childCount) {
-        childCount.addEventListener("input", calculateTotalAmount);
+        childCount.addEventListener("input", function() {
+            const value = parseInt(this.value);
+
+            // Validate child count max value is 2
+            if (value > 2) {
+                alert("Child count must be less than or equal to 2");
+                this.value = "";
+                calculateTotalAmount();
+                return;
+            }
+
+            calculateTotalAmount();
+        });
     }
 
     if (customerType && familyIncluded) {

@@ -26,7 +26,7 @@
       </p>
 
       <p style="margin: 0 0 20px 0; font-size: 14px; color: #555555; line-height: 1.6;">
-        Thank you for registering for our event! Your registration has been successfully processed. Please keep this email for your records.
+        Thank you for registering for our event! You are eligible to participate in the Ananthagiri trip scheduled for the 27th and 28th. We wish you an enjoyable and memorable experience.
       </p>
 
       <!-- Registration Details Card -->
