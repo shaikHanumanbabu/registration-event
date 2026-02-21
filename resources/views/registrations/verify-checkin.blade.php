@@ -251,10 +251,6 @@
           <i class="fas fa-check-circle me-2"></i>Verify Check-in
         </button>
       </form>
-      @else
-      <div style="background-color: #fff3cd; border: 1px solid #ffc107; color: #856404; padding: 15px; border-radius: 5px; margin-top: 20px; text-align: center;">
-        <i class="fas fa-lock me-2"></i>Please log in to verify check-in
-      </div>
       @endauth
     </div>
     @endif
