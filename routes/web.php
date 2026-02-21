@@ -20,12 +20,10 @@ Route::resource('registrations', RegistrationController::class);
 Route::get('/verify-checkin/{id}', [RegistrationController::class, 'verifyCheckin'])->name('verify-checkin');
 Route::post('/confirm-checkin/{id}', [RegistrationController::class, 'confirmCheckin'])->name('confirm-checkin');
 
-// Route to check registration success email with static data
-Route::get('/check-registration-mail', function () {
-
-
+// Route to check registration success email with dynamic id
+Route::get('/check-registration-mail/{id}', function ($id) {
     return view('emails.registration-success', [
-        'registration' => Registration::find(31), // Replace with actual registration ID or data
+        'registration' => Registration::find($id),
     ]);
 })->name('check.registration-mail');
 
