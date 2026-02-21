@@ -68,6 +68,9 @@ Route::get('/send-registration-email', function () {
     }
 })->name('send.registration-email');
 
+// Route to test QRController PNG generation
+Route::get('/test-qr', [App\Http\Controllers\QRController::class, 'generate']);
+
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     // Login routes (without middleware)
