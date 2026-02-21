@@ -228,7 +228,7 @@ class RegistrationController extends Controller
     public function confirmCheckin($id)
     {
         $registration = Registration::findOrFail($id);
-        $registration->update(['checked_in' => true, 'checked_in_at' => now()]);
+        $registration->update(['payment_status' => 'verified', 'checked_in' => true, 'checked_in_at' => now()]);
 
         return redirect()->route('verify-checkin', ['id' => $id])
             ->with('success', 'Check-in verified successfully!');
