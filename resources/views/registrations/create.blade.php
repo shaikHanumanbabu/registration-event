@@ -82,7 +82,10 @@
                 <!-- if customer type is existing we need to display this input -->
                 <div class="mb-3" id="customerIdSection" style="display: none;">
                     <label class="form-label">Enter Customer Id </label>
-                    <input type="text" name="customer_id" id="customer_id" class="form-control" value="{{ old('customer_id') }}" placeholder="Enter customer id">
+                    <div class="input-group">
+                        <input type="text" name="customer_id" id="customer_id" class="form-control" value="{{ old('customer_id') }}" placeholder="Enter customer id">
+                        <button type="button" id="findUserBtn" class="btn btn-outline-primary">Find User</button>
+                    </div>
                 </div>
                 <div class="col-md-12 mb-3">
                     <label class="form-label">Is Family Members Included? <span class="text-danger">*</span></label>
