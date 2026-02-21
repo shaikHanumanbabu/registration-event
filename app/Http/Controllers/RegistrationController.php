@@ -90,7 +90,7 @@ class RegistrationController extends Controller
         $verificationUrl = route('verify-checkin', ['id' => $registration->id]);
         $qrData = $verificationUrl;
 
-        $qrCodePath = 'images/qr_codes/registration_' . $registration->id . '.svg';
+        $qrCodePath = 'images/qr_codes/registration_' . $registration->id . '.png';
         $qrCodePublicPath = public_path($qrCodePath);
 
         // Create directory if it doesn't exist
@@ -98,10 +98,10 @@ class RegistrationController extends Controller
             mkdir(dirname($qrCodePublicPath), 0755, true);
         }
 
-        // Use SVG backend - works without any extensions
+        // Use GDLibImageBackEnd for PNG output (no imagick required)
         $renderer = new \BaconQrCode\Renderer\ImageRenderer(
             new \BaconQrCode\Renderer\RendererStyle\RendererStyle(300),
-            new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+            new \BaconQrCode\Renderer\Image\GDLibImageBackEnd()
         );
 
         $writer = new \BaconQrCode\Writer($renderer);
