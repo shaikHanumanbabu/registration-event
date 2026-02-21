@@ -235,8 +235,8 @@
                 <!-- Payment Receipt Preview -->
                 @if ($registration->payment_receipt)
                 @php
-                $receiptUrl = asset('storage/' . $registration->payment_receipt);
-                $receiptPath = public_path('storage/' . $registration->payment_receipt);
+                $receiptUrl = asset($registration->payment_receipt);
+                $receiptPath = public_path($registration->payment_receipt);
                 @endphp
                 @if(file_exists($receiptPath))
                 <a href="{{ $receiptUrl }}" target="_blank" style="display: inline-block;">

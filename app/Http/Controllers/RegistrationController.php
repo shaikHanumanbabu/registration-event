@@ -55,8 +55,13 @@ class RegistrationController extends Controller
         if ($request->hasFile('payment_receipt')) {
             $file = $request->file('payment_receipt');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('images/payment_receipts', $filename, 'public');
-            $validated['payment_receipt'] = $path;
+            $publicPath = public_path('images/payment_receipts/' . $filename);
+            // Create directory if not exists
+            if (!file_exists(dirname($publicPath))) {
+                mkdir(dirname($publicPath), 0755, true);
+            }
+            $file->move(dirname($publicPath), $filename);
+            $validated['payment_receipt'] = 'images/payment_receipts/' . $filename;
         }
 
         // Create registration
@@ -171,8 +176,13 @@ class RegistrationController extends Controller
 
             $file = $request->file('payment_receipt');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('images/payment_receipts', $filename, 'public');
-            $validated['payment_receipt'] = $path;
+            $publicPath = public_path('images/payment_receipts/' . $filename);
+            // Create directory if not exists
+            if (!file_exists(dirname($publicPath))) {
+                mkdir(dirname($publicPath), 0755, true);
+            }
+            $file->move(dirname($publicPath), $filename);
+            $validated['payment_receipt'] = 'images/payment_receipts/' . $filename;
         }
 
         $registration->update($validated);
