@@ -125,6 +125,30 @@
     </div>
     @endif
 
+
+    @if ($registration->checked_in)
+    <!-- Success Message - Already Checked In -->
+    <div class="details-card" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+      <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px; color: #fff;"></i>
+      <h2 style="color: #fff; margin: 15px 0;">Check-in Successful!</h2>
+      <p style="font-size: 16px; margin: 15px 0; line-height: 1.6;">
+        The coupon already exists. You have successfully checked in. Thank you.
+      </p>
+      <div style="background-color: rgba(0,0,0,0.1); padding: 20px; border-radius: 5px; margin-top: 20px;">
+        <p style="margin: 10px 0; font-size: 14px;">For more information, please contact:</p>
+        <p style="font-size: 18px; font-weight: bold; margin: 10px 0;">
+          <i class="fas fa-phone me-2"></i>+91 90005 27519
+        </p>
+        <p style="font-size: 18px; font-weight: bold; margin: 10px 0;">
+          <i class="fas fa-phone me-2"></i>+91 99493 59007
+        </p>
+      </div>
+      <p style="font-size: 12px; margin-top: 20px; opacity: 0.9;">
+        Checked in on: {{ $registration->checked_in_at->format('d/m/Y \a\t H:i:s') }}
+      </p>
+    </div>
+    @else
+
     <div class="header-section">
       <h1 style="margin: 0; font-size: 28px;">
         <i class="fas fa-qrcode me-2"></i>Verify Check-in
@@ -211,31 +235,29 @@
       </div>
     </div>
 
-    <!-- Check-in Status -->
+
+    <!-- Check-in Status - Not Yet Checked In -->
     <div class="details-card">
       <h3 style="margin-top: 0; color: #667eea;">
         <i class="fas fa-check-square me-2"></i>Check-in Status
       </h3>
-      @if ($registration->checked_in)
-      <div class="status-badge status-checked-in">
-        <i class="fas fa-check-circle me-2"></i>Checked In
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Checked In At:</span>
-        <span class="detail-value">{{ $registration->checked_in_at->format('d/m/Y H:i:s') }}</span>
-      </div>
-      @else
       <div class="status-badge status-not-checked">
         <i class="fas fa-times-circle me-2"></i>Not Checked In
       </div>
+      @auth('admin')
       <form action="{{ route('confirm-checkin', $registration->id) }}" method="POST" style="margin-top: 20px;">
         @csrf
         <button type="submit" class="btn btn-verify">
           <i class="fas fa-check-circle me-2"></i>Verify Check-in
         </button>
       </form>
-      @endif
+      @else
+      <div style="background-color: #fff3cd; border: 1px solid #ffc107; color: #856404; padding: 15px; border-radius: 5px; margin-top: 20px; text-align: center;">
+        <i class="fas fa-lock me-2"></i>Please log in to verify check-in
+      </div>
+      @endauth
     </div>
+    @endif
 
     <div style="text-align: center; margin-top: 30px;">
       <a href="{{ route('registrations.index') }}" class="btn btn-outline-secondary">

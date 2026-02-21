@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const adults = parseInt(adultsCount.value) || 0;
         const children = parseInt(childCount.value) || 0;
 
-        const total = adults * ADULT_PRICE + children * CHILD_PRICE;
+        const total = adults * ADULT_PRICE;
 
         // Update the total_amount field
         if (totalAmount) {

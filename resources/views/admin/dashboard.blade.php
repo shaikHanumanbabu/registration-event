@@ -134,17 +134,7 @@
         </div>
       </div>
     </div>
-    <div class="page-header">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h2 class="mb-0"><i class="fas fa-list-alt me-2"></i>All Registrations</h2>
-          <p class="mb-0 mt-2 opacity-75">Total Records: {{ $registrations->total() }}</p>
-        </div>
-        <a href="{{ route('registrations.create') }}" class="btn btn-light btn-lg">
-          <i class="fas fa-plus me-2"></i>New Registration
-        </a>
-      </div>
-    </div>
+
 
     @if (session('success'))
     <div class="alert alert-success alert-dismissible fade show">

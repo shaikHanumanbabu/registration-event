@@ -53,7 +53,11 @@ class AdminController extends Controller
   {
     try {
       $registration = Registration::findOrFail($id);
-      $registration->update(['payment_status' => 'verified']);
+      $registration->update([
+        'payment_status' => 'verified',
+        'checked_in' => 0,
+        'checked_in_at' => null
+      ]);
 
       return back()->with('success', 'Payment verified successfully for ' . $registration->name);
     } catch (\Exception $e) {
