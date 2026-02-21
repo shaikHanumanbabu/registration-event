@@ -212,25 +212,43 @@
             </td>
 
             <td class="text-center">
-              @if ($registration->qr_code)
-              @php
-              $qrUrl = asset($registration->qr_code);
-              $filePath = public_path($registration->qr_code);
-              @endphp
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                @if ($registration->qr_code)
+                @php
+                $qrUrl = asset($registration->qr_code);
+                $filePath = public_path($registration->qr_code);
+                @endphp
+                @if(file_exists($filePath))
+                <img src="{{ $qrUrl }}"
+                  class="qr-thumbnail"
+                  style="width: 50px; height: 50px; cursor: pointer; border: 1px solid #ddd; padding: 3px;"
+                  data-bs-toggle="modal"
+                  data-bs-target="#qrModal{{ $registration->id }}"
+                  alt="QR Code">
+                @else
+                <span class="badge bg-secondary">QR Not Found</span>
+                @endif
+                @else
+                <span class="text-muted">-</span>
+                @endif
 
-              @if(file_exists($filePath))
-              <img src="{{ $qrUrl }}"
-                class="qr-thumbnail"
-                style="width: 50px; height: 50px; cursor: pointer; border: 1px solid #ddd; padding: 3px;"
-                data-bs-toggle="modal"
-                data-bs-target="#qrModal{{ $registration->id }}"
-                alt="QR Code">
-              @else
-              <span class="badge bg-secondary">QR Not Found</span>
-              @endif
-              @else
-              <span class="text-muted">-</span>
-              @endif
+                <!-- Payment Receipt Preview -->
+                @if ($registration->payment_receipt)
+                @php
+                $receiptUrl = asset('storage/' . $registration->payment_receipt);
+                $receiptPath = public_path('storage/' . $registration->payment_receipt);
+                @endphp
+                @if(file_exists($receiptPath))
+                <a href="{{ $receiptUrl }}" target="_blank" style="display: inline-block;">
+                  <img src="{{ $receiptUrl }}" alt="Payment Receipt" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #aaa;">
+                </a>
+                @else
+                <span class="badge bg-secondary">Receipt Not Found</span>
+                @endif
+                @else
+                <span class="text-muted">No Receipt</span>
+                @endif
+              </div>
             </td>
             </td>
 
