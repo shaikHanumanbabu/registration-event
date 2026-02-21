@@ -103,4 +103,44 @@ document.addEventListener("DOMContentLoaded", function() {
         familyIncluded.addEventListener("change", updateFamilyFields);
         updateFamilyFields();
     }
+
+    // Fetch and populate customer data on customer_id blur
+    const customerIdInput = document.getElementById("customer_id");
+    if (customerIdInput) {
+        customerIdInput.addEventListener("blur", function() {
+            const regId = customerIdInput.value.trim();
+            if (!regId) return;
+
+            fetch(
+                    `https://legendbusinessnexus.com/LGNDSCLGRP/LGNDSCLGRP/Admin/Get_Userdatabyregid/${regId}`, {
+                        method: "GET",
+                        headers: {
+                            Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vd3d3LmF2bWFydC5jb20vIiwiYXVkIjoiaHR0cDovL3d3dy5hdm1hcnQuY29tLyIsInN1YiI6IkFWTUFSVCBBUGkiLCJpYXQiOjE3NzE2NDg0NDksImV4cCI6MTc3MjAwODQ0OSwicmVnaWQiOiJhZG1pbi1hdm1hcnQiLCJ1c2VydHlwZSI6ImFkbWluIn0.J51JqM_I13PrHxzH6sXI8EltiqDN5oqx5Z_bWjIG7DY",
+                        },
+                    },
+                )
+                .then((response) => response.json())
+                .then((data) => {
+                    // Adjust these keys based on actual API response
+                    if (data && data.status && data.status === 1 && data.data) {
+                        const user = data.data;
+                        document.querySelector('input[name="name"]').value =
+                            user[0].name || "";
+                        document.querySelector('input[name="phone"]').value =
+                            user[0].phone || "";
+                        document.querySelector('input[name="email"]').value =
+                            user[0].email || "";
+                        document.querySelector('input[name="state"]').value =
+                            user[0].state || "";
+                        document.querySelector('input[name="address"]').value =
+                            user[0].address || "";
+                    } else {
+                        alert("No user found for this Customer ID.");
+                    }
+                })
+                .catch(() => {
+                    alert("Failed to fetch customer data.");
+                });
+        });
+    }
 });
