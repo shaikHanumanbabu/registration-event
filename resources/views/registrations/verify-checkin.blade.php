@@ -157,6 +157,11 @@
     </div>
 
     <!-- Registration Details -->
+    @if ($registration->qr_code)
+    <div style="text-align:center; margin-bottom:20px;">
+      <img src="{{ asset($registration->qr_code) }}" alt="QR Code" style="max-width:180px; max-height:180px; border:1px solid #ddd; border-radius:8px; background:#fff; padding:8px;">
+    </div>
+    @endif
     <div class="details-card">
       <h3 style="margin-top: 0; color: #667eea;">
         <i class="fas fa-user me-2"></i>Personal Information

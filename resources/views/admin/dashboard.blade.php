@@ -219,7 +219,7 @@
                 $filePath = public_path($registration->qr_code);
                 @endphp
                 @if(file_exists($filePath))
-                <img src="{{ $qrUrl }}"
+                <img src="{{ asset($registration->qr_code) }}"
                   class="qr-thumbnail"
                   style="width: 50px; height: 50px; cursor: pointer; border: 1px solid #ddd; padding: 3px;"
                   data-bs-toggle="modal"
@@ -239,8 +239,8 @@
                 $receiptPath = public_path($registration->payment_receipt);
                 @endphp
                 @if(file_exists($receiptPath))
-                <a href="{{ $receiptUrl }}" target="_blank" style="display: inline-block;">
-                  <img src="{{ $receiptUrl }}" alt="Payment Receipt" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #aaa;">
+                <a href="{{ asset($registration->payment_receipt) }}" target="_blank" style="display: inline-block;">
+                  <img src="{{ asset($registration->payment_receipt) }}" alt="Payment Receipt" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; border: 1px solid #aaa;">
                 </a>
                 @else
                 <span class="badge bg-secondary">Receipt Not Found</span>
