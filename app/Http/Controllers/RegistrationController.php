@@ -86,11 +86,16 @@ class RegistrationController extends Controller
         // Create registration
         $registration = Registration::create($validated);
 
-        // Generate QR code for this registration with verification URL
+        // Generate QR code for this registration with verification URL using Endroid\QrCode
         $verificationUrl = route('verify-checkin', ['id' => $registration->id]);
-        $qrData = $verificationUrl;
+        $qrCode = \Endroid\QrCode\QrCode::create($verificationUrl)
+            ->setSize(300)
+            ->setMargin(10);
 
-        $qrCodePath = 'images/qr_codes/registration_' . $registration->id . '.svg';
+        $writer = new \Endroid\QrCode\Writer\PngWriter();
+        $result = $writer->write($qrCode);
+
+        $qrCodePath = 'images/qr_codes/registration_' . $registration->id . '.png';
         $qrCodePublicPath = public_path($qrCodePath);
 
         // Create directory if it doesn't exist
@@ -98,17 +103,7 @@ class RegistrationController extends Controller
             mkdir(dirname($qrCodePublicPath), 0755, true);
         }
 
-        // Use SvgImageBackEnd for SVG output
-        $renderer = new \BaconQrCode\Renderer\ImageRenderer(
-            new \BaconQrCode\Renderer\RendererStyle\RendererStyle(300),
-            new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
-        );
-
-        $writer = new \BaconQrCode\Writer($renderer);
-        $qrCode = $writer->writeString($qrData, 'UTF-8');
-
-        // Store directly in public folder
-        file_put_contents($qrCodePublicPath, $qrCode);
+        file_put_contents($qrCodePublicPath, $result->getString());
 
         // Update registration with QR code path
         $registration->update(['qr_code' => $qrCodePath]);
